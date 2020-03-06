@@ -4,59 +4,198 @@ import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class PlaceOrder extends StatefulWidget {
+
+  PlaceOrder(this.code) : super();
+
+  final String code;
+
+
   @override
   _PlaceOrderState createState() => _PlaceOrderState();
 }
+class _PlaceOrderState extends State<PlaceOrder>{
 
- var status;
-addUserAddress(String address1, String address2,) async{
+  SharedPreferences sharedPreferences;
+  List CODEN = [] ;
+  List data = List();
 
-  final response = await  http.post("http://shineurcar.com/api/place-order",
-      headers: {
-        'Accept':'application/json',
-        'authorization' : 'Bearer '+'13aQo5mKwQJUTTrUS9BnCbd5g',
-      },
-      body: {
-        "address_1" : "$address1",
-        "address_2": "$address2",
-      }
+  var status;
+  var state_id;
+  var city_id ;
+  var address1;
+  var address2;
+  var vehicle_id;
+  var OrderAmount;
+  var walletamount;
+  var couponAmount;
 
-  ) ;
-  status = response.body.contains('error');
 
-  var data = json.decode(response.body);
+  TotalAmount()async{
+    var finalamount = await OrderAmount - walletamount*couponAmount/100;
+    return finalamount;
 
-  if(status){
-    print('data : ${data["error"]}');
-  }else{
-    print('data : ${data["token"]}');
-    _save(data["token"]);
   }
 
-}
 
 
-_save(String token,) async {
-  final prefs = await SharedPreferences.getInstance();
-  final key = 'token';
-  final value = token;
-  prefs.setString(key, value);
-  prefs.setString('token', token);
-}
+  _Couponcode() async {
+
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.get('token');
+
+    final header = {'Accept':'application/json', 'authorization' : 'Bearer '+token};
+    final body = {
+      "code":widget.code,
+    };
+
+    var data =  await http.post("http://shineurcar.com/api/verify-coupon", headers:header,body: body);
+
+    var jsondata = json.decode(data.body);
+
+    print('Printing...');
+
+    print(jsondata);
+
+    setState((){
+
+      couponAmount =jsondata['data']['discount'];
+
+    }
+    );
+  }
+
+
+
+  Getaddress() async {
+
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.get('token');
+
+    final header = {'Accept':'application/json', 'authorization' : 'Bearer '+token};
+
+    var data =  await http.get("http://shineurcar.com/api/get-address", headers:header,);
+
+    var jsondata = json.decode(data.body);
+
+    print('Printing...');
+
+    print(jsondata);
+
+    setState((){
+
+      vehicle_id =jsondata['data']['id'];
+
+    }
+    );
+  }
+
+  Getvehicledetails() async {
+
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.get('token');
+
+    final header = {'Accept':'application/json', 'authorization' : 'Bearer '+token};
+
+    var data =  await http.get("http://shineurcar.com/api/vehicles-type", headers:header,);
+
+    var jsondata = json.decode(data.body);
+
+    print('Printing...');
+
+    print(jsondata);
+
+    setState((){
+      OrderAmount =jsondata['data']['Prices'][0]['price'];
+    }
+    );
+  }
+
+  GetOrderAmount() async {
+
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.get('token');
+
+    final header = {'Accept':'application/json', 'authorization' : 'Bearer '+token};
+
+    var data =  await http.get("http://shineurcar.com/api/service-list", headers:header,);
+
+    var jsondata = json.decode(data.body);
+
+    print('Printing...');
+
+    print(jsondata);
+
+    setState((){
+
+
+    }
+    );
+  }
+
+  WalletAmount() async {
+
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.get('token');
+
+    final header = {'Accept':'application/json', 'authorization' : 'Bearer '+token};
+
+    var data =  await http.get("http://shineurcar.com/api/service-list", headers:header,);
+
+    var jsondata = json.decode(data.body);
+
+    print('Printing...');
+
+    print(jsondata);
+
+    setState((){
+      walletamount= jsondata['data'];
+
+    }
+    );
+  }
 
 
 
 
+  placeorder() async{
+
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.get('token');
+
+    final response = await  http.post("http://shineurcar.com/api/place-order",
+        headers: {
+          'Accept':'application/json',
+          'authorization' : 'Bearer '+token,
+        },
+        body: {
+          "address_1" : address1,
+          "address_2": address2,
+          "state_id" :state_id,
+          "city_id" : city_id,
+          "vical type id" : vehicle_id,
+          "order amount" : OrderAmount,
+          "wallet amount" : walletamount,
+          "total amount" : TotalAmount(),
+        }
+
+    ) ;
+    status = response.body.contains('error');
+
+    var data = json.decode(response.body);
+    print(data);
 
 
+  }
 
 
+@override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _Couponcode();
+  }
 
 
-
-
-
-class _PlaceOrderState extends State<PlaceOrder>{
   @override
   Widget build(BuildContext context) {
     return Container();

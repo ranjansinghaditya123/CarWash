@@ -1,3 +1,4 @@
+import 'package:car_wash/Dashboard/Coupon.dart';
 import 'package:car_wash/Dashboard/PlaceOrder.dart';
 import 'package:flutter/material.dart';
 import 'package:car_wash/Dashboard/Umap.dart';
@@ -114,7 +115,7 @@ class _CarServicesState extends State<CarServices> {
         {
           return FlatButton(
             onPressed: (){
-              Navigator.push(context, MaterialPageRoute(builder: (context) => PlaceOrder()),
+              Navigator.push(context, MaterialPageRoute(builder: (context) =>Coupon()),
               );
             },
             child: Container(

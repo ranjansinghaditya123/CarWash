@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-
+import 'package:car_wash/Dashboard/PlaceOrder.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 
 class Coupon extends StatefulWidget{
+
   @override
   _CouponState createState() => _CouponState();
 
@@ -13,21 +14,44 @@ class Coupon extends StatefulWidget{
 
 class _CouponState extends State<Coupon> {
 
+
+
   SharedPreferences sharedPreferences;
   String code;
   String _mySelection;
-
   List CODEN = [] ;
   List data = List();
 
-  _codedetails() async {
+  var status;
+  var state_id;
+  var city_id ;
+  var address1;
+  var address2;
+  var vehicle_id;
+  var OrderAmount;
+  var walletamount;
+  var couponAmount;
+
+
+  TotalAmount()async{
+    var finalamount = await OrderAmount - walletamount*couponAmount/100;
+    return finalamount;
+
+  }
+
+
+
+  _Couponcode() async {
 
     final prefs = await SharedPreferences.getInstance();
     final token = prefs.get('token');
 
     final header = {'Accept':'application/json', 'authorization' : 'Bearer '+token};
+    final body = {
+      "code":code,
+    };
 
-    var data =  await http.get("http://shineurcar.com/api/service-list", headers:header,);
+    var data =  await http.post("http://shineurcar.com/api/verify-coupon", headers:header,body: body);
 
     var jsondata = json.decode(data.body);
 
@@ -36,10 +60,27 @@ class _CouponState extends State<Coupon> {
     print(jsondata);
 
     setState((){
-      CODEN = jsondata;
+
+      couponAmount =jsondata['data']['discount'];
+
     }
     );
   }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   Future<String> VehiclesDetails() async {
     final prefs = await SharedPreferences.getInstance();
@@ -64,7 +105,7 @@ class _CouponState extends State<Coupon> {
     // TODO: implement initState
     super.initState();
     VehiclesDetails();
-    _codedetails();
+    _Couponcode();
   }
 
 
@@ -125,6 +166,9 @@ class _CouponState extends State<Coupon> {
                     Container(
                       margin: EdgeInsets.all(16),
                       child: TextField(
+                        onChanged: (value){
+                          code = value ;
+                        },
                         textAlign: TextAlign.center,
                         keyboardType: TextInputType.emailAddress,
                         decoration: InputDecoration(
@@ -168,7 +212,10 @@ class _CouponState extends State<Coupon> {
                             bottomLeft: Radius.circular(40.0),
                           )),
                       child: FlatButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.push(context, MaterialPageRoute(builder: (context) =>PlaceOrder(code)),
+                          );
+                        },
                         child: Text(
                           'Place Order',
                           style: TextStyle(color: Colors.white, fontSize: 20),
