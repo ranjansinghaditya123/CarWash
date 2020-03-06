@@ -14,9 +14,9 @@ class _OrdersState extends State<Orders> {
   Widget build(BuildContext context){
 
     return Scaffold(
-        backgroundColor: Colors.blueGrey[50],
+        backgroundColor: Colors.amber[200],
         appBar: AppBar(
-          title: Center(child: Text('Orders'),),
+          title: Center(child: Text('Orders',style: TextStyle(color: Colors.purple),),),
           backgroundColor: Colors.amber,),
         bottomNavigationBar: BottomAppBar(
           color: Colors.amber,

@@ -43,13 +43,13 @@ class Api{
           'Accept':'application/json'
         },
         body: {
-          "mobile": "$name",
-          "name": "$mobile",
+          "mobile": "$mobile",
+          "name": "$name",
           "password" : "$password"
         } ) ;
     status = response.body.contains('error');
-
     var data = json.decode(response.body);
+    print(data);
 
     if(status){
       print('data : ${data["error"]}');
@@ -88,7 +88,8 @@ class Api{
 
     final response = await  http.post("$serverUrl/change-password",
         headers: {
-          'Accept':'application/json'
+          'Accept':'application/json',
+          'authorization' : 'Bearer '+'13aQo5mKwQJUTTrUS9BnCbd5g',
         },
         body: {
 
@@ -113,9 +114,10 @@ class Api{
 
   updateUserProfile(String name) async{
 
-    final response = await  http.post("$serverUrl/change-password",
+    final response = await  http.post("$serverUrl",
         headers: {
-          'Accept':'application/json'
+          'Accept':'application/json',
+          'authorization' : 'Bearer '+'13aQo5mKwQJUTTrUS9BnCbd5g',
         },
         body: {
           "name" : "$name",
@@ -135,65 +137,9 @@ class Api{
 
   }
 
-  updateUserAddress(String address1, String address2, String cityId, String stateId, String latitude, String longitude  ) async{
 
-    final response = await  http.post("$serverUrl/change-password",
-        headers: {
-          'Accept':'application/json'
-        },
-        body: {
-          "address_1" : "$address1",
-          "address_2": "$address2",
-          "city_id" : "$cityId",
-          "State_id" : "$stateId",
-          "latitude" : "$latitude",
-          "longitude": "$longitude",
 
-        }
 
-    ) ;
-    status = response.body.contains('error');
-
-    var data = json.decode(response.body);
-
-    if(status){
-      print('data : ${data["error"]}');
-    }else{
-      print('data : ${data["token"]}');
-      _save(data["token"]);
-    }
-
-  }
-
-  addUserAddress(String address1, String address2, String cityId, String stateId, String latitude, String longitude  ) async{
-
-    final response = await  http.post("$serverUrl/change-password",
-        headers: {
-          'Accept':'application/json'
-        },
-        body: {
-          "address_1" : "$address1",
-          "address_2": "$address2",
-          "city_id" : "$cityId",
-          "State_id" : "$stateId",
-          "latitude" : "$latitude",
-          "longitude": "$longitude",
-
-        }
-
-    ) ;
-    status = response.body.contains('error');
-
-    var data = json.decode(response.body);
-
-    if(status){
-      print('data : ${data["error"]}');
-    }else{
-      print('data : ${data["token"]}');
-      _save(data["token"]);
-    }
-
-  }
 
 
 //  editsingerprofile(String name, String about, String address, String city, String state, String mobileNumber, String musicCategory)async{

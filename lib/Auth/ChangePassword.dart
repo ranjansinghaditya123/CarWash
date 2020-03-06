@@ -1,5 +1,6 @@
 import 'package:car_wash/Api.dart';
 import 'package:car_wash/Dashboard/Umap.dart';
+import 'package:car_wash/Dashboard/UserProfile.dart';
 import 'package:flutter/material.dart';
 import 'package:car_wash/Auth/LogIn.dart';
 
@@ -32,7 +33,7 @@ class _ChangePasswordState extends State<ChangePassword>{
         _showDialog();
         msgStatus = 'Check email or password';
       } else {
-        Navigator.push(context, MaterialPageRoute(builder: (context) => Umap(),
+        Navigator.push(context, MaterialPageRoute(builder: (context) =>UserProfile(),
         ));
       }
     });
@@ -125,6 +126,7 @@ class _ChangePasswordState extends State<ChangePassword>{
                     Container(
                       margin: EdgeInsets.all(16),
                       child: TextField(
+                        controller: _oldPasswordController,
                         textAlign: TextAlign.center,
                         keyboardType: TextInputType.text,
                         decoration: InputDecoration(
@@ -140,6 +142,7 @@ class _ChangePasswordState extends State<ChangePassword>{
                     Container(
                       margin: EdgeInsets.fromLTRB(16,0, 16,10),
                       child: TextField(
+                        controller: _newPasswordController,
                         textAlign: TextAlign.center,
                         keyboardType: TextInputType.text,
                         decoration: InputDecoration(

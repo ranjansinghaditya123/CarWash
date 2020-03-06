@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class UserProfile extends StatefulWidget {
   @override
@@ -6,6 +8,64 @@ class UserProfile extends StatefulWidget {
 }
 
 class _UserProfileState extends State<UserProfile> {
+  
+  String address1;
+  String address2;
+  String city ;
+  String state;
+
+  String data; // wallet balance
+
+  List walletvalue = [];
+  List Address = [];
+
+  _walletDetails () async {
+
+
+    final header = {'Accept':'application/json', 'authorization' : 'Bearer '+'13aQo5mKwQJUTTrUS9BnCbd5g'};
+
+    var data =  await http.get("http://shineurcar.com/api/wallet", headers:header,);
+
+    var jsondata = json.decode(data.body);
+
+    print('Printing...');
+
+    print(jsondata);
+
+    setState((){
+      walletvalue = jsondata;
+    }
+    );
+  }
+
+
+  _addressDetails () async {
+
+
+    final header = {'Accept':'application/json', 'authorization' : 'Bearer '+'13aQo5mKwQJUTTrUS9BnCbd5g'};
+
+    var data =  await http.get("http://shineurcar.com/api/get-address", headers:header,);
+
+    var jsondata = json.decode(data.body);
+
+    print('Printing...');
+
+    print(jsondata);
+
+    setState((){
+      Address = jsondata;
+    }
+    );
+  }
+
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    _addressDetails();
+    _walletDetails();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -103,30 +163,102 @@ class _UserProfileState extends State<UserProfile> {
                       style: TextStyle(fontSize: 20, color: Colors.pinkAccent),
                     ),
                   ),
+
+                ListView.builder(
+                  itemCount: walletvalue.length,
+                    itemBuilder:(BuildContext context , int index){
+                    return                   Row(
+                      children: <Widget>[
+                    Container(
+                    child: Text(
+                      'Wallet balance',
+                      style: TextStyle(fontSize: 20, color: Colors.pinkAccent),
+                    ),
+                      margin: EdgeInsets.all(5),
+                      ),
+                      Container(
+                      child: Text(walletvalue[index]['data'],
+                      style: TextStyle(fontSize: 20, color: Colors.pinkAccent),
+                      ),
+                      margin: EdgeInsets.all(5),
+                      ),
+                      ],
+                      );
+                    }
+                ),
                   SizedBox(
-                    height: 30,
+                    height:20,
                     width: double.infinity,
                   ),
                   SizedBox(
                     height: 35,
                     width: double.infinity,
                   ),
+                  ListView.builder(
+                    itemCount: Address.length,
+                      itemBuilder:(BuildContext context , int index){
+                      return Column(
+                        children: <Widget>[
+                          Container(
+                            child: Text(Address[index]['address_1'],
+                              style: TextStyle(fontSize: 15),
+                            ),
+                          ),
+                          Container(
+                            child: Text(Address[index]['address_2'],
+                              style: TextStyle(fontSize: 15),
+                            ),
+                          ),
+                          Container(
+                            child: Text(Address[index]['city_name'],
+                              style: TextStyle(fontSize: 15),
+                            ),
+                          ),
+                          Container(
+                            child: Text(Address[index]['State_name'],
+                              style: TextStyle(fontSize: 15),
+                            ),
+                          ),
+                        ],
+                      ) ;
+                      }
+                  ),
                   Container(
-                    child: Text(
-                      'A paragraph is a series of sentences that are organized and ',
-                      style: TextStyle(fontSize: 15),
+                    margin: EdgeInsets.all(10),
+                    height: 60,
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                        color: Colors.amber,
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(40.0),
+                          topRight: Radius.circular(40.0),
+                          bottomRight: Radius.circular(40.0),
+                          bottomLeft: Radius.circular(40.0),
+                        )),
+                    child: FlatButton(
+                      child: Text(
+                        'Add Address',
+                        style: TextStyle(color: Colors.white, fontSize: 20),
+                      ),
                     ),
                   ),
                   Container(
-                    child: Text(
-                      'and are all related to a single topic. Almost every piece of',
-                      style: TextStyle(fontSize: 15),
-                    ),
-                  ),
-                  Container(
-                    child: Text(
-                      'writing you do that is longer than a few sentences',
-                      style: TextStyle(fontSize: 15),
+                    margin: EdgeInsets.all(10),
+                    height: 60,
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                        color: Colors.amber,
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(40.0),
+                          topRight: Radius.circular(40.0),
+                          bottomRight: Radius.circular(40.0),
+                          bottomLeft: Radius.circular(40.0),
+                        )),
+                    child: FlatButton(
+                      child: Text(
+                        'Update Address',
+                        style: TextStyle(color: Colors.white, fontSize: 20),
+                      ),
                     ),
                   ),
                 ],

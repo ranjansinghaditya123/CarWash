@@ -1,13 +1,52 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
-class Services extends StatefulWidget {
+class CarServices extends StatefulWidget {
   @override
-  _ServicesState createState() => _ServicesState();
+  _CarServicesState createState() => _CarServicesState();
 
 }
 
-class _ServicesState extends State<Services> {
+class _CarServicesState extends State<CarServices> {
+
+  String id ="";
+  String service_name ="";
+  String price = "";
+  String description = "";
+  String service_term = "";
+  String service_type = "";
+  String service_status= "";
+
+   List  Services = [] ;
+
+  _servicedetails () async {
+
+    final header = {'Accept':'application/json', 'authorization' : 'Bearer '+'13aQo5mKwQJUTTrUS9BnCbd5g'};
+
+    var data =  await http.get("http://shineurcar.com/api/service-list", headers:header,);
+
+    var jsondata = json.decode(data.body);
+
+    print('Printing...');
+
+    print(jsondata);
+
+    setState((){
+      Services = jsondata;
+    }
+    );
+  }
+
+
+@override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _servicedetails();
+  }
+
 
   @override
 
@@ -15,9 +54,9 @@ class _ServicesState extends State<Services> {
 
 
     return Scaffold(
-      backgroundColor: Colors.amber,
+      backgroundColor: Colors.amber[200],
       appBar: AppBar(
-        title: Center(child: Text('Services'),),
+        title: Center(child: Text('Services',style: TextStyle(color: Colors.purple),),),
         backgroundColor: Colors.amber,),
       bottomNavigationBar: BottomAppBar(
         color: Colors.amber,
@@ -46,95 +85,38 @@ class _ServicesState extends State<Services> {
           ],
         ),
       ),
-      body: ListView(
-        children: <Widget>[
-          Column(
-            mainAxisAlignment: MainAxisAlignment.end,
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: <Widget>[
-              Container(
-                margin: EdgeInsets.fromLTRB(10, 10, 10, 0),
-                height: 100,
-                width: double.infinity,
-                decoration: BoxDecoration(
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey,
-                        blurRadius: 8.0,
-                      ),
-                    ],
-                    color: Colors.white,
+      body: ListView.builder(
+        itemCount: Services.length,
+        itemBuilder: (BuildContext context ,int index)
+        {
+          return Container(
+            margin: EdgeInsets.fromLTRB(10, 10, 10, 0),
+            height: 100,
+            width: double.infinity,
+            decoration: BoxDecoration(
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey,
+                  blurRadius: 8.0,
                 ),
-                child: ListTile(
-                  title: Text("Bronze Car Wash Package",style: TextStyle(color: Colors.black,fontSize: 20),),
-                  subtitle: Text("10\$",style: TextStyle(color: Colors.red,fontSize: 15),),
-                  leading: Icon(Icons.local_car_wash,color: Colors.orangeAccent,size: 50,),
-
-                ),
+              ],
+              color: Colors.white,
+            ),
+            child: ListTile(
+              title: Text(Services[index]["info"]["service_name"],style: TextStyle(color: Colors.black,fontSize: 20),),
+              subtitle:Column(
+                children: <Widget>[
+                  Text(Services[index]["info"]["description"],style: TextStyle(color: Colors.black,fontSize: 6),),
+                  Text(Services[index]["prices"]["price"],style: TextStyle(color: Colors.orangeAccent,fontSize: 10),),
+                ],
               ),
-              Container(
-                margin: EdgeInsets.fromLTRB(10, 2, 10, 0),
-                height: 100,
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey,
-                      blurRadius: 8.0,
-                    ),
-                  ],
-                  color: Colors.white,
-                ),
-                child: ListTile(
-                  title: Text("Silver Car Wash Package",style: TextStyle(color: Colors.black,fontSize: 20),),
-                  subtitle: Text("20\$",style: TextStyle(color: Colors.red,fontSize: 15),),
-                  leading: Icon(Icons.local_car_wash,color: Colors.orangeAccent,size: 50,),
-
-                ),
-              ),
-              Container(
-                margin: EdgeInsets.fromLTRB(10, 2, 10, 0),
-                height: 100,
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey,
-                      blurRadius: 8.0,
-                    ),
-                  ],
-                  color: Colors.white,
-                ),
-                child: ListTile(
-                  title: Text("Gold Car Wash Package",style: TextStyle(color: Colors.black,fontSize: 20),),
-                  subtitle: Text("30\$",style: TextStyle(color: Colors.red,fontSize: 15),),
-                  leading: Icon(Icons.local_car_wash,color: Colors.orangeAccent,size: 50,),
-
-                ),
-              ),
-              Container(
-                margin: EdgeInsets.fromLTRB(10, 2, 10, 0),
-                height: 100,
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey,
-                      blurRadius: 8.0,
-                    ),
-                  ],
-                  color: Colors.white,
-                ),
-                child: ListTile(
-                  title: Text("Platinum Car Wash Package",style: TextStyle(color: Colors.black,fontSize: 20),),
-                  subtitle: Text("40\$",style: TextStyle(color: Colors.deepOrange,fontSize: 15),),
-                 leading: Icon(Icons.local_car_wash,color: Colors.orangeAccent,size: 50,),
-                ),
-              ),
-            ],
-          ),
-        ],
+              leading: Icon(Icons.local_car_wash,color: Colors.blue,size: 50,),
+            ),
+          );
+          },
       )
     );
   }
 }
+
+
