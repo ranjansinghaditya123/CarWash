@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:car_wash/Dashboard/CarServices.dart';
 import 'package:car_wash/Dashboard/Umap.dart';
 import 'package:car_wash/Dashboard/UserProfile.dart';
-
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 class MyOrders extends StatefulWidget{
 
   @override
@@ -11,6 +13,43 @@ class MyOrders extends StatefulWidget{
 }
 
 class _MyOrdersState extends State<MyOrders> {
+
+SharedPreferences sharedPreferences;
+
+List OrderList = [];
+
+
+  _MyOrder() async {
+
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.get('token');
+
+    final header = {'Accept':'application/json', 'authorization' : 'Bearer '+token};
+
+
+    var data =  await http.get("http://shineurcar.com/api/my-order", headers:header,);
+
+    var jsondata = json.decode(data.body);
+
+    print('Printing...');
+
+    print(jsondata);
+
+    setState((){
+
+      OrderList = jsondata['data'];
+    }
+    );
+  }
+
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _MyOrder();
+  }
+
 
   @override
   Widget build(BuildContext context){
@@ -129,7 +168,7 @@ class _MyOrdersState extends State<MyOrders> {
               ],
             ),
           ],
-        )
+        ),
     );
   }
 }
