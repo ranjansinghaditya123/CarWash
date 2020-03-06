@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:car_wash/Dashboard/Orders.dart';
+import 'package:car_wash/Dashboard/MyOrders.dart';
 import 'package:car_wash/Dashboard/CarServices.dart';
 import 'package:car_wash/Dashboard/UserProfile.dart';
 
@@ -85,7 +85,7 @@ class _UmapState extends State<Umap> {
             Expanded(
               child: FlatButton(
                 onPressed: (){
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => Orders()),
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => MyOrders()),
                   );
                 },
                 child: Icon(Icons.history,color: Colors.purple,),

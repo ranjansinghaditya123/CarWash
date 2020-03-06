@@ -25,29 +25,51 @@ class _AddAddressState extends State<AddAddress>{
   var cityId;
   var stateId;
   List citylist = [];
+  String _mySelection;
+  var latitude;
+  var longitude;
+  List data = List();
+
+  var cityid;
+  var stateid;
 
 
-  _cityListDetails () async {
 
 
-    final header = {'Accept':'application/json', 'authorization' : 'Bearer '+'13aQo5mKwQJUTTrUS9BnCbd5g'};
 
-    var data =  await http.get("http://shineurcar.com/api/city-details", headers: header,);
 
-    var jsondata = json.decode(data.body);
 
-    print('Printing...');
+  Future<String> CityListDetails() async {
+    var res = await http.get("http://shineurcar.com/api/city-list" ,headers: {"Accept": "application/json",'authorization' : 'Bearer '+'13aQo5mKwQJUTTrUS9BnCbd5g'},);
+    var resBody = json.decode(res.body);
 
-    print(jsondata);
+    setState(() {
+      data = resBody['data'];
+    });
 
-    setState((){
-      citylist = jsondata;
-    }
-    );
+
+    print(resBody);
+
+    return "Sucess";
+  }
+  Future<String> StateListDetails() async {
+    var res = await http.get("http://shineurcar.com/api/State-list" ,headers: {"Accept": "application/json",'authorization' : 'Bearer '+'13aQo5mKwQJUTTrUS9BnCbd5g'},);
+    var resBody = json.decode(res.body);
+
+    setState(() {
+      data = resBody['data'];
+      cityid = resBody['data']['id'];
+      stateid = resBody['data']['id'];
+
+    });
+
+    print(resBody);
+
+    return "Sucess";
   }
 
 
-  addUserAddress(String address1, String address2, String cityId, String stateId, String latitude, String longitude  ) async{
+  addUserAddress(String address1, String address2,) async{
 
     final response = await  http.post("$serverUrl/add-address",
         headers: {
@@ -57,10 +79,10 @@ class _AddAddressState extends State<AddAddress>{
         body: {
           "address_1" : "$address1",
           "address_2": "$address2",
-          "city_id" : "$cityId",
-          "State_id" : "$stateId",
-          "latitude" : "$latitude",
-          "longitude": "$longitude",
+          "city_id" :  cityid,
+          "State_id" : stateid,
+          "latitude" : latitude,
+          "longitude": longitude,
         }
 
     ) ;
@@ -89,17 +111,15 @@ class _AddAddressState extends State<AddAddress>{
   String msgStatus = '';
 
 
-  var latitude;
-  var longitude;
+
 
   final TextEditingController _address1Controller =  TextEditingController();
   final TextEditingController _address2Controller =  TextEditingController();
 
 
   _onPressed(){
-    if(_address1Controller.text.isNotEmpty && _address2Controller.text.isNotEmpty && cityId.isNotEmpty && stateId.isNotEmpty
-    && latitude.isNotEmpty && longitude.isNotEmpty){
-      addUserAddress(_address1Controller.text, _address2Controller.text,cityId,stateId,latitude,longitude).whenComplete((){
+    if(_address1Controller.text.isNotEmpty && _address2Controller.text.isNotEmpty){
+      addUserAddress(_address1Controller.text,_address2Controller.text).whenComplete((){
         if(api.status){
           msgStatus = 'All Fields Are mandatory';
         }else{
@@ -156,7 +176,8 @@ class _AddAddressState extends State<AddAddress>{
   void initState() {
     // TODO: implement initState
     _getCurrentLocation();
-    _cityListDetails();
+    CityListDetails();
+    StateListDetails();
     super.initState();
   }
 
@@ -225,21 +246,39 @@ class _AddAddressState extends State<AddAddress>{
                         ),
                       ),
                       Container(
-                        height: 20,
-                        width: 20,
-                        child: ListView.builder(
-                          itemCount: citylist.length,
-                          itemBuilder: (BuildContext context , int index){
-                            return DropdownButton<String>(
-                              hint: Text('City'),
-                              items: <String>[citylist[index]['city_name']].map((String value) {
-                                return new DropdownMenuItem<String>(
-                                  value: value,
-                                  child: new Text(value),
-                                );
-                              }).toList(),
+                        margin: EdgeInsets.all(10),
+                        child: new DropdownButton(
+                          hint: Text('City'),
+                          items: data.map((item) {
+                            return new DropdownMenuItem(
+                              child: new Text(item["city_name"]),
+                              value: item["id"].toString(),
                             );
+                          }).toList(),
+                          onChanged: (newVal) {
+                            setState(() {
+                              _mySelection = newVal;
+                            });
                           },
+                          value: _mySelection,
+                        ),
+                      ),
+                      Container(
+                        margin: EdgeInsets.all(10),
+                        child: new DropdownButton(
+                          hint: Text('State'),
+                          items: data.map((item) {
+                            return new DropdownMenuItem(
+                              child: new Text(item["State_name"]),
+                              value: item["id"].toString(),
+                            );
+                          }).toList(),
+                          onChanged: (newVal) {
+                            setState(() {
+                              _mySelection = newVal;
+                            });
+                          },
+                          value: _mySelection,
                         ),
                       ),
                       SizedBox(

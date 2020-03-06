@@ -11,7 +11,6 @@ class UpdateAddress extends StatefulWidget{
   UpdateAddress({Key key , this.title}) : super(key : key);
   final String title;
 
-
   @override
 
   _UpdateAddressState createState() => _UpdateAddressState();
@@ -23,10 +22,56 @@ class _UpdateAddressState extends State<UpdateAddress>{
   String serverUrl = "http://shineurcar.com/api";
   var status ;
   var token ;
+  var cityId;
+  var stateId;
+  List citylist = [];
+  String _mySelection;
+  var latitude;
+  var longitude;
+  List data = List();
 
-  updateUserAddress(String address1, String address2, String cityId, String stateId, String latitude, String longitude  ) async{
+  var cityid;
+  var stateid;
 
-    final response = await  http.post("$serverUrl/update-address",
+
+
+
+
+
+
+  Future<String> CityListDetails() async {
+    var res = await http.get("http://shineurcar.com/api/city-list" ,headers: {"Accept": "application/json",'authorization' : 'Bearer '+'13aQo5mKwQJUTTrUS9BnCbd5g'},);
+    var resBody = json.decode(res.body);
+
+    setState(() {
+      data = resBody['data'];
+    });
+
+
+    print(resBody);
+
+    return "Sucess";
+  }
+  Future<String> StateListDetails() async {
+    var res = await http.get("http://shineurcar.com/api/State-list" ,headers: {"Accept": "application/json",'authorization' : 'Bearer '+'13aQo5mKwQJUTTrUS9BnCbd5g'},);
+    var resBody = json.decode(res.body);
+
+    setState(() {
+      data = resBody['data'];
+      cityid = resBody['data']['id'];
+      stateid = resBody['data']['id'];
+
+    });
+
+    print(resBody);
+
+    return "Sucess";
+  }
+
+
+  addUserAddress(String address1, String address2,) async{
+
+    final response = await  http.post("$serverUrl/add-address",
         headers: {
           'Accept':'application/json',
           'authorization' : 'Bearer '+'13aQo5mKwQJUTTrUS9BnCbd5g',
@@ -34,11 +79,10 @@ class _UpdateAddressState extends State<UpdateAddress>{
         body: {
           "address_1" : "$address1",
           "address_2": "$address2",
-          "city_id" : "$cityId",
-          "State_id" : "$stateId",
-          "latitude" : "$latitude",
-          "longitude": "$longitude",
-
+          "city_id" :  cityid,
+          "State_id" : stateid,
+          "latitude" : latitude,
+          "longitude": longitude,
         }
 
     ) ;
@@ -66,19 +110,16 @@ class _UpdateAddressState extends State<UpdateAddress>{
   Api api = new Api();
   String msgStatus = '';
 
-  var cityId;
-  var stateId;
-  var latitude;
-  var longitude;
+
+
 
   final TextEditingController _address1Controller =  TextEditingController();
   final TextEditingController _address2Controller =  TextEditingController();
 
 
   _onPressed(){
-    if(_address1Controller.text.isNotEmpty && _address2Controller.text.isNotEmpty && cityId.isNotEmpty && stateId.isNotEmpty
-        && latitude.isNotEmpty && longitude.isNotEmpty){
-      updateUserAddress(_address1Controller.text, _address2Controller.text,cityId,stateId,latitude,longitude).whenComplete((){
+    if(_address1Controller.text.isNotEmpty && _address2Controller.text.isNotEmpty){
+      addUserAddress(_address1Controller.text,_address2Controller.text).whenComplete((){
         if(api.status){
           msgStatus = 'All Fields Are mandatory';
         }else{
@@ -135,6 +176,8 @@ class _UpdateAddressState extends State<UpdateAddress>{
   void initState() {
     // TODO: implement initState
     _getCurrentLocation();
+    CityListDetails();
+    StateListDetails();
     super.initState();
   }
 
@@ -161,7 +204,7 @@ class _UpdateAddressState extends State<UpdateAddress>{
                       Container(
                         child: Center(
                           child: Text(
-                            'Update Address',
+                            'Add Address',
                             style: TextStyle(fontSize: 40, color: Colors.black),
                           ),
                         ),
@@ -186,7 +229,6 @@ class _UpdateAddressState extends State<UpdateAddress>{
                           ),
                         ),
                       ),
-
                       Container(
                         margin: EdgeInsets.all(16),
                         child: TextFormField(
@@ -201,6 +243,42 @@ class _UpdateAddressState extends State<UpdateAddress>{
                                 borderSide: BorderSide(color: Colors.pink)),
                             contentPadding: EdgeInsets.all(16),
                           ),
+                        ),
+                      ),
+                      Container(
+                        margin: EdgeInsets.all(10),
+                        child: new DropdownButton(
+                          hint: Text('City'),
+                          items: data.map((item) {
+                            return new DropdownMenuItem(
+                              child: new Text(item["city_name"]),
+                              value: item["id"].toString(),
+                            );
+                          }).toList(),
+                          onChanged: (newVal) {
+                            setState(() {
+                              _mySelection = newVal;
+                            });
+                          },
+                          value: _mySelection,
+                        ),
+                      ),
+                      Container(
+                        margin: EdgeInsets.all(10),
+                        child: new DropdownButton(
+                          hint: Text('State'),
+                          items: data.map((item) {
+                            return new DropdownMenuItem(
+                              child: new Text(item["State_name"]),
+                              value: item["id"].toString(),
+                            );
+                          }).toList(),
+                          onChanged: (newVal) {
+                            setState(() {
+                              _mySelection = newVal;
+                            });
+                          },
+                          value: _mySelection,
                         ),
                       ),
                       SizedBox(
@@ -238,3 +316,5 @@ class _UpdateAddressState extends State<UpdateAddress>{
     );
   }
 }
+
+

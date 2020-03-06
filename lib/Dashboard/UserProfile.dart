@@ -1,6 +1,6 @@
 import 'dart:developer';
 import 'package:car_wash/Dashboard/AddAddress.dart';
-import 'package:car_wash/Dashboard/Orders.dart';
+import 'package:car_wash/Dashboard/MyOrders.dart';
 import 'package:car_wash/Dashboard/CarServices.dart';
 import 'package:flutter/services.dart';
 import 'package:car_wash/Dashboard/Umap.dart';
@@ -102,7 +102,7 @@ class _UserProfileState extends State<UserProfile> {
               Expanded(
                 child: FlatButton(
                   onPressed: (){
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => Orders()),
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => MyOrders()),
                     );
                   },
                   child: Icon(Icons.history,color: Colors.purple,),

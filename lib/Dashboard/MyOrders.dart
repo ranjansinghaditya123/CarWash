@@ -3,16 +3,14 @@ import 'package:car_wash/Dashboard/CarServices.dart';
 import 'package:car_wash/Dashboard/Umap.dart';
 import 'package:car_wash/Dashboard/UserProfile.dart';
 
-
-
-class Orders extends StatefulWidget{
+class MyOrders extends StatefulWidget{
 
   @override
-  _OrdersState createState() => _OrdersState();
+  _MyOrdersState createState() => _MyOrdersState();
 
 }
 
-class _OrdersState extends State<Orders> {
+class _MyOrdersState extends State<MyOrders> {
 
   @override
   Widget build(BuildContext context){
@@ -47,7 +45,7 @@ class _OrdersState extends State<Orders> {
               Expanded(
                 child: FlatButton(
                   onPressed: (){
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => Orders()),
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => MyOrders()),
                     );
                   },
                   child: Icon(Icons.history,color: Colors.purple,),

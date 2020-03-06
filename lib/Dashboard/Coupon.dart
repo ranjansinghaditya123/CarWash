@@ -127,7 +127,9 @@ class _CouponState extends State<Coupon> {
                         ),
                       ),
                     ),
-                    Container(child: new DropdownButton(
+                    Container(
+                      margin: EdgeInsets.all(10),
+                      child: new DropdownButton(
                       hint: Text('City'),
                       items: data.map((item) {
                         return new DropdownMenuItem(
