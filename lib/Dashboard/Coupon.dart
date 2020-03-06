@@ -6,21 +6,20 @@ import 'dart:convert';
 class Coupon extends StatefulWidget{
   @override
   _CouponState createState() => _CouponState();
+
 }
 
 class _CouponState extends State<Coupon> {
 
   String code;
+  String _mySelection;
 
   List CODEN = [] ;
+  List data = List();
 
-  _codedetails () async {
+  _codedetails() async {
 
     final header = {'Accept':'application/json', 'authorization' : 'Bearer '+'13aQo5mKwQJUTTrUS9BnCbd5g'};
-
-
-
-
 
     var data =  await http.get("http://shineurcar.com/api/service-list", headers:header,);
 
@@ -35,6 +34,29 @@ class _CouponState extends State<Coupon> {
     }
     );
   }
+
+  Future<String> VehiclesDetails() async {
+    var res = await http.get("http://shineurcar.com/api/vehicles-type" ,headers: {"Accept": "application/json",'authorization' : 'Bearer '+'13aQo5mKwQJUTTrUS9BnCbd5g'},);
+    var resBody = json.decode(res.body);
+
+    setState(() {
+      data = resBody['data'];
+    });
+
+    print(resBody);
+
+    return "Sucess";
+  }
+
+
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    VehiclesDetails();
+  }
+
 
 
   @override
@@ -104,6 +126,22 @@ class _CouponState extends State<Coupon> {
                           contentPadding: EdgeInsets.all(16),
                         ),
                       ),
+                    ),
+                    Container(child: new DropdownButton(
+                      hint: Text('City'),
+                      items: data.map((item) {
+                        return new DropdownMenuItem(
+                          child: new Text(item["vical_type_name"]),
+                          value: item["id"].toString(),
+                        );
+                      }).toList(),
+                      onChanged: (newVal) {
+                        setState(() {
+                          _mySelection = newVal;
+                        });
+                      },
+                      value: _mySelection,
+                    ),
                     ),
                     Container(
                       margin: EdgeInsets.all(20),

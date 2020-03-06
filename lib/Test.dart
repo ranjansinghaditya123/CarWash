@@ -41,20 +41,6 @@ class _TestState extends State<Test> {
         title: Text("Hospital"),
       ),
       body: new Center(
-        child: new DropdownButton(
-          items: data.map((item) {
-            return new DropdownMenuItem(
-              child: new Text(item["city_name"]),
-              value: item["id"].toString(),
-            );
-          }).toList(),
-          onChanged: (newVal) {
-            setState(() {
-              _mySelection = newVal;
-            });
-          },
-          value: _mySelection,
-        ),
       ),
     );
   }

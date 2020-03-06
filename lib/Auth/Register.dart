@@ -1,5 +1,5 @@
 import 'package:car_wash/Api.dart';
-import 'package:car_wash/Dashboard/UserProfile.dart';
+import 'package:car_wash/Dashboard/Umap.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -33,7 +33,7 @@ class _RegisterState extends State<Register> {
         _showDialog();
         msgStatus = 'Check email or password';
       } else {
-        Navigator.push(context, MaterialPageRoute(builder: (context) => UserProfile()),
+        Navigator.push(context, MaterialPageRoute(builder: (context) => Umap()),
         );
       }
     });

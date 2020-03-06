@@ -3,6 +3,7 @@ import 'package:car_wash/Dashboard/UserProfile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:car_wash/Dashboard/Umap.dart';
 
 class LogIn extends StatefulWidget{
 
@@ -19,7 +20,7 @@ class _LogInState extends State<LogIn> {
     final prefs = await SharedPreferences.getInstance();
     final value = prefs.get('token');
     if(value != null){
-      Navigator.push(context, MaterialPageRoute(builder: (context) => UserProfile()),
+      Navigator.push(context, MaterialPageRoute(builder: (context) =>Umap()),
       );
     }
   }
@@ -37,7 +38,7 @@ class _LogInState extends State<LogIn> {
         _showDialog();
         msgStatus = 'Check email or password';
       } else {
-        Navigator.push(context, MaterialPageRoute(builder: (context) => UserProfile()),
+        Navigator.push(context, MaterialPageRoute(builder: (context) => Umap()),
         );
       }
     });

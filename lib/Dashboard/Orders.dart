@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:car_wash/Dashboard/CarServices.dart';
+import 'package:car_wash/Dashboard/Umap.dart';
+import 'package:car_wash/Dashboard/UserProfile.dart';
+
 
 
 class Orders extends StatefulWidget{
@@ -19,27 +23,43 @@ class _OrdersState extends State<Orders> {
           title: Center(child: Text('Orders',style: TextStyle(color: Colors.purple),),),
           backgroundColor: Colors.amber,),
         bottomNavigationBar: BottomAppBar(
-          color: Colors.amber,
+
           child: Row(
             children: <Widget>[
               Expanded(
                 child: FlatButton(
-                    child: Icon(Icons.map,color: Colors.purple,size:35,)
+                  onPressed:(){
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => Umap()),
+                    );
+                  },
+                  child: Icon(Icons.location_searching,color: Colors.purple,),
                 ),
               ),
               Expanded(
                 child: FlatButton(
-                  child: Icon(Icons.history,color: Colors.purple,size:35,),
+                  onPressed: (){
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => CarServices()),
+                    );
+                  },
+                  child: Icon(Icons.add_shopping_cart,color: Colors.purple,),
                 ),
               ),
               Expanded(
                 child: FlatButton(
-                    child:Icon(Icons.add_shopping_cart,color: Colors.purple,size:35,)
+                  onPressed: (){
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => Orders()),
+                    );
+                  },
+                  child: Icon(Icons.history,color: Colors.purple,),
                 ),
               ),
               Expanded(
                 child: FlatButton(
-                    child: Icon(Icons.account_circle,color: Colors.purple,size:35,)
+                  onPressed: (){
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => UserProfile()),
+                    );
+                  },
+                  child: Icon(Icons.account_circle,color: Colors.purple,),
                 ),
               ),
             ],

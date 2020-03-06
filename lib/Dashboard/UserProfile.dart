@@ -1,6 +1,13 @@
+import 'dart:developer';
+import 'package:car_wash/Dashboard/AddAddress.dart';
+import 'package:car_wash/Dashboard/Orders.dart';
+import 'package:car_wash/Dashboard/CarServices.dart';
+import 'package:flutter/services.dart';
+import 'package:car_wash/Dashboard/Umap.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:car_wash/Dashboard/UpdateAddress.dart';
 
 class UserProfile extends StatefulWidget {
   @override
@@ -72,26 +79,41 @@ class _UserProfileState extends State<UserProfile> {
     return Scaffold(
         backgroundColor: Colors.amber[100],
         bottomNavigationBar: BottomAppBar(
-          color: Colors.amber,
           child: Row(
             children: <Widget>[
               Expanded(
                 child: FlatButton(
+                  onPressed:(){
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => Umap()),
+                    );
+                  },
                   child: Icon(Icons.location_searching,color: Colors.purple,),
                 ),
               ),
               Expanded(
                 child: FlatButton(
+                  onPressed: (){
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => CarServices()),
+                    );
+                  },
                   child: Icon(Icons.add_shopping_cart,color: Colors.purple,),
                 ),
               ),
               Expanded(
                 child: FlatButton(
+                  onPressed: (){
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => Orders()),
+                    );
+                  },
                   child: Icon(Icons.history,color: Colors.purple,),
                 ),
               ),
               Expanded(
                 child: FlatButton(
+                  onPressed: (){
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => UserProfile()),
+                    );
+                  },
                   child: Icon(Icons.account_circle,color: Colors.purple,),
                 ),
               ),
@@ -236,6 +258,10 @@ class _UserProfileState extends State<UserProfile> {
                           bottomLeft: Radius.circular(40.0),
                         )),
                     child: FlatButton(
+                      onPressed: (){
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => AddAddress()),
+                        );
+                      },
                       child: Text(
                         'Add Address',
                         style: TextStyle(color: Colors.white, fontSize: 20),
@@ -255,6 +281,10 @@ class _UserProfileState extends State<UserProfile> {
                           bottomLeft: Radius.circular(40.0),
                         )),
                     child: FlatButton(
+                      onPressed: (){
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => UpdateAddress()),
+                        );
+                      },
                       child: Text(
                         'Update Address',
                         style: TextStyle(color: Colors.white, fontSize: 20),

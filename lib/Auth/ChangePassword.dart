@@ -1,15 +1,12 @@
 import 'package:car_wash/Api.dart';
 import 'package:car_wash/Dashboard/Umap.dart';
-import 'package:car_wash/Dashboard/UserProfile.dart';
 import 'package:flutter/material.dart';
 import 'package:car_wash/Auth/LogIn.dart';
-
 
 class ChangePassword extends StatefulWidget{
 
   ChangePassword({Key key , this.title}) : super(key : key);
   final String title;
-
 
   @override
 
@@ -33,7 +30,7 @@ class _ChangePasswordState extends State<ChangePassword>{
         _showDialog();
         msgStatus = 'Check email or password';
       } else {
-        Navigator.push(context, MaterialPageRoute(builder: (context) =>UserProfile(),
+        Navigator.push(context, MaterialPageRoute(builder: (context) =>Umap(),
         ));
       }
     });
