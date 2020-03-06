@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+import 'package:shared_preferences/shared_preferences.dart';
+
 
 class Coupon extends StatefulWidget{
   @override
@@ -11,6 +13,7 @@ class Coupon extends StatefulWidget{
 
 class _CouponState extends State<Coupon> {
 
+  SharedPreferences sharedPreferences;
   String code;
   String _mySelection;
 
@@ -19,7 +22,10 @@ class _CouponState extends State<Coupon> {
 
   _codedetails() async {
 
-    final header = {'Accept':'application/json', 'authorization' : 'Bearer '+'13aQo5mKwQJUTTrUS9BnCbd5g'};
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.get('token');
+
+    final header = {'Accept':'application/json', 'authorization' : 'Bearer '+token};
 
     var data =  await http.get("http://shineurcar.com/api/service-list", headers:header,);
 
@@ -36,7 +42,10 @@ class _CouponState extends State<Coupon> {
   }
 
   Future<String> VehiclesDetails() async {
-    var res = await http.get("http://shineurcar.com/api/vehicles-type" ,headers: {"Accept": "application/json",'authorization' : 'Bearer '+'13aQo5mKwQJUTTrUS9BnCbd5g'},);
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.get('token');
+
+    var res = await http.get("http://shineurcar.com/api/vehicles-type" ,headers: {"Accept": "application/json",'authorization' : 'Bearer '+token},);
     var resBody = json.decode(res.body);
 
     setState(() {
@@ -55,6 +64,7 @@ class _CouponState extends State<Coupon> {
     // TODO: implement initState
     super.initState();
     VehiclesDetails();
+    _codedetails();
   }
 
 

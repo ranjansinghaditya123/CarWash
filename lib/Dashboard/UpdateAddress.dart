@@ -20,8 +20,10 @@ class UpdateAddress extends StatefulWidget{
 class _UpdateAddressState extends State<UpdateAddress>{
 
   String serverUrl = "http://shineurcar.com/api";
+
+  SharedPreferences sharedPreferences ;
+
   var status ;
-  var token ;
   var cityId;
   var stateId;
   List citylist = [];
@@ -40,7 +42,11 @@ class _UpdateAddressState extends State<UpdateAddress>{
 
 
   Future<String> CityListDetails() async {
-    var res = await http.get("http://shineurcar.com/api/city-list" ,headers: {"Accept": "application/json",'authorization' : 'Bearer '+'13aQo5mKwQJUTTrUS9BnCbd5g'},);
+
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.get('token');
+
+    var res = await http.get("http://shineurcar.com/api/city-list" ,headers: {"Accept": "application/json",'authorization' : 'Bearer '+token},);
     var resBody = json.decode(res.body);
 
     setState(() {
@@ -53,7 +59,9 @@ class _UpdateAddressState extends State<UpdateAddress>{
     return "Sucess";
   }
   Future<String> StateListDetails() async {
-    var res = await http.get("http://shineurcar.com/api/State-list" ,headers: {"Accept": "application/json",'authorization' : 'Bearer '+'13aQo5mKwQJUTTrUS9BnCbd5g'},);
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.get('token');
+    var res = await http.get("http://shineurcar.com/api/State-list" ,headers: {"Accept": "application/json",'authorization' : 'Bearer '+token},);
     var resBody = json.decode(res.body);
 
     setState(() {
@@ -71,10 +79,12 @@ class _UpdateAddressState extends State<UpdateAddress>{
 
   addUserAddress(String address1, String address2,) async{
 
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.get('token');
     final response = await  http.post("$serverUrl/add-address",
         headers: {
           'Accept':'application/json',
-          'authorization' : 'Bearer '+'13aQo5mKwQJUTTrUS9BnCbd5g',
+          'authorization' : 'Bearer '+token,
         },
         body: {
           "address_1" : "$address1",

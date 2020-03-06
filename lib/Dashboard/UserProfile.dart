@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:car_wash/Dashboard/UpdateAddress.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class UserProfile extends StatefulWidget {
   @override
@@ -15,7 +16,8 @@ class UserProfile extends StatefulWidget {
 }
 
 class _UserProfileState extends State<UserProfile> {
-  
+
+  SharedPreferences sharedPreferences;
   String address1;
   String address2;
   String city ;
@@ -28,8 +30,10 @@ class _UserProfileState extends State<UserProfile> {
 
   _walletDetails () async {
 
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.get('token');
 
-    final header = {'Accept':'application/json', 'authorization' : 'Bearer '+'13aQo5mKwQJUTTrUS9BnCbd5g'};
+    final header = {'Accept':'application/json', 'authorization' : 'Bearer '+token};
 
     var data =  await http.get("http://shineurcar.com/api/wallet", headers:header,);
 
@@ -48,8 +52,10 @@ class _UserProfileState extends State<UserProfile> {
 
   _addressDetails () async {
 
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.get('token');
 
-    final header = {'Accept':'application/json', 'authorization' : 'Bearer '+'13aQo5mKwQJUTTrUS9BnCbd5g'};
+    final header = {'Accept':'application/json', 'authorization' : 'Bearer '+token};
 
     var data =  await http.get("http://shineurcar.com/api/get-address", headers:header,);
 

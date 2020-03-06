@@ -1,4 +1,4 @@
-import 'package:car_wash/Onboarding/Onboarding.dart';
+import 'package:car_wash/Dashboard/Umap.dart';
 import 'package:flutter/material.dart';
 import 'theme.dart';
 
@@ -13,7 +13,7 @@ class MyApp extends StatelessWidget{
     return MaterialApp(
       theme: myTheme,
       debugShowCheckedModeBanner: false,
-      home: Onboarding(),
+      home: Umap(),
     );
   }
 }
