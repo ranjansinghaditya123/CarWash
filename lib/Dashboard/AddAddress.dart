@@ -11,7 +11,6 @@ class AddAddress extends StatefulWidget{
   AddAddress({Key key , this.title}) : super(key : key);
   final String title;
 
-
   @override
 
   _AddAddressState createState() => _AddAddressState();

@@ -16,11 +16,11 @@ class _TestState extends State<Test> {
   List data = List(); //edited line
 
   Future<String> getSWData() async {
-    var res = await http.get(Uri.encodeFull(url), headers: {"Accept": "application/json",'authorization' : 'Bearer '+'13aQo5mKwQJUTTrUS9BnCbd5g'},);
+    var res = await http.get("http://shineurcar.com/api/city-list" ,headers: {"Accept": "application/json",'authorization' : 'Bearer '+'13aQo5mKwQJUTTrUS9BnCbd5g'},);
     var resBody = json.decode(res.body);
 
     setState(() {
-      data = resBody;
+      data = resBody['data'];
     });
 
     print(resBody);
@@ -38,7 +38,7 @@ class _TestState extends State<Test> {
   Widget build(BuildContext context) {
     return new Scaffold(
       appBar: AppBar(
-        title: Text("Hospital Management"),
+        title: Text("Hospital"),
       ),
       body: new Center(
         child: new DropdownButton(

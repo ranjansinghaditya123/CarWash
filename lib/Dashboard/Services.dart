@@ -34,7 +34,7 @@ class _CarServicesState extends State<CarServices> {
     print(jsondata);
 
     setState((){
-      Services = jsondata;
+      Services = jsondata["data"];
     }
     );
   }
@@ -51,7 +51,6 @@ class _CarServicesState extends State<CarServices> {
   @override
 
   Widget build(BuildContext context){
-
 
     return Scaffold(
       backgroundColor: Colors.amber[200],
@@ -102,17 +101,19 @@ class _CarServicesState extends State<CarServices> {
               ],
               color: Colors.white,
             ),
-            child: ListTile(
-              title: Text(Services[index]["info"]["service_name"],style: TextStyle(color: Colors.black,fontSize: 20),),
-              subtitle:Column(
-                children: <Widget>[
-                  Text(Services[index]["info"]["description"],style: TextStyle(color: Colors.black,fontSize: 6),),
-                  Text(Services[index]["prices"]["price"],style: TextStyle(color: Colors.orangeAccent,fontSize: 10),),
-                ],
+            child:Card(
+              child: Container(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(Services[index]["info"]["service_name"].toString(),style:TextStyle(color: Colors.blue,fontSize: 25),),
+                    Text(Services[index]["info"]["description"].toString().trim(),style:TextStyle(color: Colors.blue,fontSize: 25),),
+                    Text(Services[index]["prices"][0]["price"].toString(),style:TextStyle(color: Colors.deepOrange,fontSize: 25),),
+                  ],
+                ),
               ),
-              leading: Icon(Icons.local_car_wash,color: Colors.blue,size: 50,),
-            ),
-          );
+            ));
           },
       )
     );
